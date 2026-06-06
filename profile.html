@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A5C4A">
+<title>My Profile · NutriScan</title>
+<link rel="stylesheet" href="style.css">
+<script src="i18n.js"></script>
+<script src="core.js"></script>
+</head>
+<body>
+<div class="phone">
+
+  <div class="header">
+    <a class="back-btn" href="index.html">&#8249;</a>
+    <div class="header-title">
+      <div class="dish-name" data-i18n="profile-title">My Profile</div>
+      <div class="dish-location" data-i18n="profile-sub">Personal nutrition goals</div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="welcome-strip-p" data-i18n="profile-intro">Set your daily targets. Every dish then shows its share of your goals instead of a generic 2,000 kcal reference.</div>
+
+    <div class="card">
+      <div class="card-header" data-i18n="calc-title">Calorie Calculator</div>
+      <div class="card-body">
+        <div class="calc-intro" data-i18n="calc-intro">Estimate your daily goals from your body data.</div>
+
+        <div class="form-field" style="margin-top:10px;">
+          <label class="form-label" data-i18n="calc-gender">Gender</label>
+          <div class="seg-row">
+            <button class="seg-btn active" id="seg-male" onclick="setGender('male')" data-i18n="calc-male">Male</button>
+            <button class="seg-btn" id="seg-female" onclick="setGender('female')" data-i18n="calc-female">Female</button>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-top:12px;">
+          <div class="form-field">
+            <label class="form-label" data-i18n="calc-age">Age</label>
+            <input class="form-input" id="c-age" type="text" inputmode="numeric" autocomplete="off" placeholder="22">
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="calc-weight">Weight (kg)</label>
+            <input class="form-input" id="c-weight" type="text" inputmode="decimal" autocomplete="off" placeholder="70">
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="calc-height">Height (cm)</label>
+            <input class="form-input" id="c-height" type="text" inputmode="numeric" autocomplete="off" placeholder="175">
+          </div>
+        </div>
+
+        <div class="form-field" style="margin-top:12px;">
+          <label class="form-label" data-i18n="calc-activity">Activity Level</label>
+          <select class="form-select" id="c-activity">
+            <option value="sedentary" data-i18n="calc-act-sedentary">Sedentary (little or no exercise)</option>
+            <option value="light" data-i18n="calc-act-light">Light (1 to 3 days/week)</option>
+            <option value="moderate" selected data-i18n="calc-act-moderate">Moderate (3 to 5 days/week)</option>
+            <option value="active" data-i18n="calc-act-active">Active (6 to 7 days/week)</option>
+            <option value="veryactive" data-i18n="calc-act-veryactive">Very active (physical job)</option>
+          </select>
+        </div>
+
+        <div class="form-field" style="margin-top:12px;">
+          <label class="form-label" data-i18n="calc-goal">Goal</label>
+          <select class="form-select" id="c-goal">
+            <option value="lose50" data-i18n="calc-goal-lose50">Lose 0.5 kg per week</option>
+            <option value="lose25" data-i18n="calc-goal-lose25">Lose 0.25 kg per week</option>
+            <option value="maintain" selected data-i18n="calc-goal-maintain">Maintain weight</option>
+            <option value="gain25" data-i18n="calc-goal-gain25">Gain 0.25 kg per week</option>
+            <option value="gain50" data-i18n="calc-goal-gain50">Gain 0.5 kg per week</option>
+          </select>
+        </div>
+
+        <button class="form-submit" onclick="calculate()" data-i18n="calc-btn">Calculate My Goals</button>
+        <div class="calc-result" id="calc-result" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" data-i18n="goals-label">Daily Goals</div>
+      <div class="card-body">
+
+        <div class="form-section-label" data-i18n="preset-label">Quick Presets</div>
+        <div class="preset-row">
+          <button class="preset-btn" data-preset="lose"     onclick="applyPreset('lose')"     data-i18n="preset-lose">Lose</button>
+          <button class="preset-btn" data-preset="maintain" onclick="applyPreset('maintain')" data-i18n="preset-maintain">Maintain</button>
+          <button class="preset-btn" data-preset="gain"     onclick="applyPreset('gain')"     data-i18n="preset-gain">Gain</button>
+        </div>
+
+        <div class="form-field" style="margin-top:14px;">
+          <label class="form-label" data-i18n="goal-kcal">Calories (kcal)</label>
+          <input class="form-input" id="g-kcal" type="text" inputmode="numeric" autocomplete="off" oninput="markCustom()">
+        </div>
+        <div class="form-row" style="margin-top:12px;">
+          <div class="form-field">
+            <label class="form-label" data-i18n="goal-protein">Protein (g)</label>
+            <input class="form-input" id="g-protein" type="text" inputmode="numeric" autocomplete="off" oninput="markCustom()">
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="goal-carbs">Carbohydrates (g)</label>
+            <input class="form-input" id="g-carbs" type="text" inputmode="numeric" autocomplete="off" oninput="markCustom()">
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="goal-fat">Fat (g)</label>
+            <input class="form-input" id="g-fat" type="text" inputmode="numeric" autocomplete="off" oninput="markCustom()">
+          </div>
+        </div>
+
+        <button class="form-submit" onclick="saveGoals()" data-i18n="profile-save">Save Goals</button>
+        <div class="reset-link" onclick="resetGoals()" data-i18n="profile-reset">Reset to standard reference</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:10px;color:var(--muted);" data-i18n="page-footer">NutriScan 鲜码 · Prototype v0.3</div>
+  </div>
+</div>
+
+<script>
+/* locale-proof number parse: accepts comma or period, ignores spaces */
+function parseNum(v) {
+  return parseFloat(String(v == null ? '' : v).replace(',', '.').trim());
+}
+
+function fill(p) {
+  document.getElementById('g-kcal').value    = p.kcal;
+  document.getElementById('g-protein').value = p.protein;
+  document.getElementById('g-carbs').value   = p.carbs;
+  document.getElementById('g-fat').value     = p.fat;
+}
+function highlightPreset(key) {
+  document.querySelectorAll('.preset-btn').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.preset === key);
+  });
+}
+function applyPreset(key) {
+  var p = GOAL_PRESETS[key];
+  fill(p);
+  highlightPreset(key);
+}
+function markCustom() { highlightPreset(null); }
+
+function saveGoals() {
+  var p = {
+    kcal:    Math.round(parseNum(document.getElementById('g-kcal').value))    || 0,
+    protein: Math.round(parseNum(document.getElementById('g-protein').value)) || 0,
+    carbs:   Math.round(parseNum(document.getElementById('g-carbs').value))   || 0,
+    fat:     Math.round(parseNum(document.getElementById('g-fat').value))     || 0
+  };
+  var matched = 'custom';
+  Object.keys(GOAL_PRESETS).forEach(function (k) {
+    var g = GOAL_PRESETS[k];
+    if (g.kcal === p.kcal && g.protein === p.protein && g.carbs === p.carbs && g.fat === p.fat) matched = k;
+  });
+  p.preset = matched;
+  setProfile(p);
+  showToast(t('profile-saved'));
+}
+function resetGoals() {
+  fill(DEFAULT_GOALS);
+  highlightPreset(null);
+  setProfile(Object.assign({}, DEFAULT_GOALS));
+  showToast(t('profile-saved'));
+}
+
+/* ── Calorie calculator (Mifflin-St Jeor) ── */
+var calcGender = 'male';
+var lastCalc = null;
+var ACT = { sedentary: 1.2, light: 1.375, moderate: 1.55, active: 1.725, veryactive: 1.9 };
+var GOALDEF = {
+  lose50:   { d: -550, deficit: true  },
+  lose25:   { d: -275, deficit: true  },
+  maintain: { d: 0,    deficit: false },
+  gain25:   { d: 275,  deficit: false },
+  gain50:   { d: 550,  deficit: false }
+};
+
+function setGender(g) {
+  calcGender = g;
+  document.getElementById('seg-male').classList.toggle('active', g === 'male');
+  document.getElementById('seg-female').classList.toggle('active', g === 'female');
+}
+
+function renderResult() {
+  if (!lastCalc) return;
+  var r = document.getElementById('calc-result');
+  r.style.display = 'block';
+  r.innerHTML = t('calc-maintenance') + ': <b>' + lastCalc.tdee + '</b> kcal &nbsp;·&nbsp; ' +
+                t('calc-target') + ': <b>' + lastCalc.kcal + '</b> kcal';
+}
+
+function calculate() {
+  var age = parseNum(document.getElementById('c-age').value);
+  var w   = parseNum(document.getElementById('c-weight').value);
+  var h   = parseNum(document.getElementById('c-height').value);
+  if (!(age > 0) || !(w > 0) || !(h > 0)) { showToast(t('calc-error')); return; }
+
+  var bmr  = 10 * w + 6.25 * h - 5 * age + (calcGender === 'male' ? 5 : -161);
+  var tdee = bmr * ACT[document.getElementById('c-activity').value];
+  var goal = GOALDEF[document.getElementById('c-goal').value];
+  var target = tdee + goal.d;
+
+  /* goal-dependent split: high protein in a deficit, balanced otherwise */
+  var proteinPerKg = goal.deficit ? 2.2 : 1.8;
+  var fatPct       = goal.deficit ? 0.25 : 0.28;
+  var protein = Math.round(w * proteinPerKg);
+  var fat     = Math.round(target * fatPct / 9);
+  var carbs   = Math.round((target - protein * 4 - fat * 9) / 4);
+  if (carbs < 0) carbs = 0;
+  var kcal = Math.round(target / 10) * 10;
+
+  fill({ kcal: kcal, protein: protein, carbs: carbs, fat: fat });
+  highlightPreset(null);
+  lastCalc = { tdee: Math.round(tdee / 10) * 10, kcal: kcal };
+  renderResult();
+  showToast(t('calc-done'));
+}
+
+/* keep calculator result in sync with language toggle */
+window.refreshDynamicTexts = function () { renderResult(); };
+
+document.addEventListener('DOMContentLoaded', function () {
+  var p = getProfile();
+  fill(p);
+  highlightPreset(p.preset || null);
+});
+</script>
+</body>
+</html>

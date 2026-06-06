@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A5C4A">
+<title>Operator Dashboard — NutriScan</title>
+<link rel="stylesheet" href="style.css">
+<script src="i18n.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+<style>
+  .section-head { font-size:10.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.7px; margin-bottom:6px; }
+  .badge-live { display:inline-block; padding:2px 7px; border-radius:4px; background:#E8F5E9; color:#2E7D32; border:1px solid #A5D6A7; font-size:9.5px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="header">
+    <a class="back-btn" href="index.html">&#8249;</a>
+    <div class="header-title">
+      <div class="dish-name" data-i18n="dash-title">Operator Dashboard</div>
+      <div class="dish-location" data-i18n="dash-sub">NutriScan 鲜码 · Admin View</div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-num" id="stat-scans">127</div><div class="stat-lbl" data-i18n="stat-scans-lbl">Scans today</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-dishes">4</div><div class="stat-lbl" data-i18n="stat-dishes-lbl">Dishes active</div></div>
+      <div class="stat-box"><div class="stat-num">2</div><div class="stat-lbl" data-i18n="stat-canteens-lbl">Canteens</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" data-i18n="dish-mgmt">Dish Management</div>
+      <div class="card-body" style="padding-bottom:10px;">
+        <div id="dish-list">
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">干煸仔鸡饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">餐饮综合楼 · 07:42 · 54 scans</div></div>
+            <button class="qr-btn" onclick="openQR('干煸仔鸡饭  Dry-Fried Young Chicken with Rice','dish-ganbian.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">黑巧椰椰骑士冷萃酸奶碗 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 07:45 · 41 scans</div></div>
+            <button class="qr-btn" onclick="openQR('黑巧椰椰骑士冷萃酸奶碗  Black Chocolate Coconut Hazelnut Cold Brew Yogurt Bowl','dish-yn-blackchoco.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">坚果冷萃酸奶碗 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 08:10 · 32 scans</div></div>
+            <button class="qr-btn" onclick="openQR('坚果冷萃酸奶碗  Nutty Cold Brew Yogurt Bowl','dish-yn-nutbowl.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">超级芒果酸奶昔 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 08:22 · 28 scans</div></div>
+            <button class="qr-btn" onclick="openQR('超级芒果酸奶昔  Super Mango Yogurt Smoothie','dish-yn-mango.html')">QR</button>
+          </div>
+          <div id="custom-dish-rows"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" data-i18n="analytics-head">Today's Scan Analytics</div>
+      <div class="card-body">
+        <div class="analytics-row"><span class="ar-label" data-i18n="an-peak-lbl">Peak hour</span><span data-i18n="an-peak-val">11:30 to 12:30 (68 scans)</span></div>
+        <div class="analytics-row"><span class="ar-label" data-i18n="an-top-lbl">Most scanned dish</span><span data-i18n="an-top-val">干煸仔鸡饭 (54 scans)</span></div>
+        <div class="analytics-row"><span class="ar-label" data-i18n="an-allerg-lbl">Allergen taps</span><span data-i18n="an-allerg-val">Dairy · Tree Nuts (most flagged)</span></div>
+        <div class="analytics-row"><span class="ar-label" data-i18n="an-time-lbl">Avg. time on page</span><span data-i18n="an-time-val">18 seconds</span></div>
+        <div class="analytics-row"><span class="ar-label" data-i18n="an-return-lbl">Return visitors</span><span data-i18n="an-return-val">34%</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-head" data-i18n="actions-head">Actions</div>
+      <button class="add-btn" onclick="openAddDish()" data-i18n="add-dish-btn">+ Add New Dish</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header" data-i18n="datasource-head">Data Source</div>
+      <div class="card-body">
+        <p class="info-note" data-i18n="datasource-p1">Nutritional values are estimated from Chinese Food Composition Standards (China CDC, 6th ed.) by entering dish ingredients and preparation method. No lab testing required.</p>
+        <p class="info-note" style="margin-top:8px;" data-i18n="datasource-p2">QR codes are generated automatically when a dish is created and do not change when values are updated.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:10px;color:var(--muted);" data-i18n="dash-footer">NutriScan 鲜码 · Prototype v0.2 · Operator Interface</div>
+  </div>
+
+
+  <!-- QR MODAL -->
+  <div class="qr-modal" id="qr-modal">
+    <div class="qr-card">
+      <div class="qr-card-name" id="qr-dish-name"></div>
+      <div class="qr-canvas-wrap"><canvas id="qr-canvas" width="180" height="180"></canvas></div>
+      <div class="qr-url-text" id="qr-url-text"></div>
+      <div class="qr-btn-row">
+        <button class="qr-dl-btn" onclick="downloadQR()">Download PNG</button>
+        <button class="qr-close-btn" onclick="closeQR()">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ADD DISH SHEET -->
+  <div class="form-overlay" id="add-form">
+    <div class="form-sheet">
+      <div class="form-sheet-header">
+        <span class="form-sheet-title" data-i18n="form-title">Add New Dish</span>
+        <button class="form-close-btn" onclick="closeAddDish()">&#215;</button>
+      </div>
+      <div class="form-body">
+
+        <div class="form-section-label" data-i18n="form-id-head">Identification</div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-cn-lbl">Chinese Name *</label>
+            <input class="form-input" id="f-cn" type="text" placeholder="e.g. 糖醋排骨">
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-en-lbl">English Name *</label>
+            <input class="form-input" id="f-en" type="text" placeholder="e.g. Sweet and Sour Ribs">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-canteen-lbl">Canteen</label>
+            <select class="form-select" id="f-canteen">
+              <option value="燕南食堂">燕南食堂 Yannan</option>
+              <option value="勺园食堂">勺园食堂 Shaoyuan</option>
+              <option value="农园食堂">农园食堂 Nongyuan</option>
+              <option value="学五食堂">学五食堂 Xuewu</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-station-lbl">Station</label>
+            <input class="form-input" id="f-station" type="text" placeholder="e.g. 炒菜区 A4">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" data-i18n="form-serving-lbl">Serving Size (grams) *</label>
+          <input class="form-input" id="f-serving" type="number" min="1" placeholder="e.g. 250">
+        </div>
+
+        <div class="form-section-label" data-i18n="form-nutr-head">Nutrition per Serving</div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-kcal-lbl">Calories (kcal) *</label>
+            <input class="form-input" id="f-kcal" type="number" min="0" placeholder="e.g. 420">
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-protein-lbl">Protein (g) *</label>
+            <input class="form-input" id="f-protein" type="number" min="0" placeholder="e.g. 18">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-carbs-lbl">Carbohydrates (g) *</label>
+            <input class="form-input" id="f-carbs" type="number" min="0" placeholder="e.g. 42">
+          </div>
+          <div class="form-field">
+            <label class="form-label" data-i18n="form-fat-lbl">Fat (g) *</label>
+            <input class="form-input" id="f-fat" type="number" min="0" placeholder="e.g. 22">
+          </div>
+        </div>
+
+        <div class="form-section-label" data-i18n="form-allerg-head">Allergens (tap to select)</div>
+        <div class="allergen-check-grid">
+          <button class="allergen-check" data-name="Peanuts"   onclick="toggleAllergen(this)" data-i18n="form-al-peanuts">Peanuts</button>
+          <button class="allergen-check" data-name="Soy"       onclick="toggleAllergen(this)" data-i18n="form-al-soy">Soy</button>
+          <button class="allergen-check" data-name="Gluten"    onclick="toggleAllergen(this)" data-i18n="form-al-gluten">Gluten</button>
+          <button class="allergen-check" data-name="Sesame"    onclick="toggleAllergen(this)" data-i18n="form-al-sesame">Sesame</button>
+          <button class="allergen-check" data-name="Dairy"     onclick="toggleAllergen(this)" data-i18n="form-al-dairy">Dairy</button>
+          <button class="allergen-check" data-name="Shellfish" onclick="toggleAllergen(this)" data-i18n="form-al-shellfish">Shellfish</button>
+          <button class="allergen-check" data-name="Eggs"      onclick="toggleAllergen(this)" data-i18n="form-al-eggs">Eggs</button>
+          <button class="allergen-check" data-name="Tree Nuts" onclick="toggleAllergen(this)" data-i18n="form-al-treenuts">Tree Nuts</button>
+        </div>
+
+        <div id="form-error" style="font-size:11px;color:#C0392B;display:none;"></div>
+
+        <button class="form-submit" onclick="submitDish()" data-i18n="form-submit">Add Dish to Dashboard</button>
+
+        <p style="font-size:10px;color:var(--muted);text-align:center;line-height:1.5;" data-i18n="form-note">
+          In the live system, a nutrition page is auto-generated from this form and goes live immediately.
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+window.addEventListener('load', function() {
+  getCustomDishes().forEach(function(d){ appendDishRow(d); });
+  updateStats();
+});
+
+function getCustomDishes() {
+  try { return JSON.parse(localStorage.getItem('nutriscan_custom_dishes')||'[]'); } catch(e){ return []; }
+}
+function saveCustomDishes(a) { try{ localStorage.setItem('nutriscan_custom_dishes',JSON.stringify(a)); }catch(e){} }
+function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+function updateStats() {
+  var n=3+getCustomDishes().length;
+  document.getElementById('stat-dishes').textContent=n;
+  document.getElementById('stat-scans').textContent=127+getCustomDishes().length*3;
+}
+function appendDishRow(d) {
+  var r=document.createElement('div'); r.className='dish-row'; r.id='row-'+d.id;
+  r.innerHTML='<div class="status-dot active"></div>'+
+    '<div style="flex:1;"><div class="dr-name">'+d.cn+' &nbsp;<span class="badge-live">Live</span><span class="badge-new">New</span></div>'+
+    '<div class="dr-meta">'+d.canteen+' '+(d.station||'')+' · Just added</div></div>'+
+    '<button class="qr-btn" onclick="openQR(\''+d.cn+'  '+d.en+'\',\''+d.file+'\')">QR</button>';
+  document.getElementById('custom-dish-rows').appendChild(r);
+}
+
+/* QR */
+var _qrFile='';
+window.openQR=function(name,file){
+  _qrFile=file;
+  var url=window.location.origin+window.location.pathname.replace('dashboard.html','')+file;
+  document.getElementById('qr-dish-name').textContent=name;
+  document.getElementById('qr-url-text').textContent=url;
+  new QRious({element:document.getElementById('qr-canvas'),value:url,size:180,foreground:'#1A5C4A',background:'#ffffff',level:'M'});
+  document.getElementById('qr-modal').style.display='flex';
+};
+window.closeQR=function(){ document.getElementById('qr-modal').style.display='none'; };
+window.downloadQR=function(){
+  var a=document.createElement('a');
+  a.href=document.getElementById('qr-canvas').toDataURL('image/png');
+  a.download='nutriscan-qr-'+_qrFile.replace('.html','')+'.png';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+};
+
+/* Add dish form */
+window.openAddDish=function(){
+  ['f-cn','f-en','f-station','f-serving','f-kcal','f-protein','f-carbs','f-fat'].forEach(function(id){
+    document.getElementById(id).value=''; document.getElementById(id).classList.remove('err');
+  });
+  document.querySelectorAll('.allergen-check').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('form-error').style.display='none';
+  document.getElementById('add-form').style.display='flex';
+};
+window.closeAddDish=function(){ document.getElementById('add-form').style.display='none'; };
+window.toggleAllergen=function(btn){ btn.classList.toggle('on'); };
+window.submitDish=function(){
+  var errEl=document.getElementById('form-error'); errEl.style.display='none';
+  var req=[{id:'f-cn',l:'Chinese name'},{id:'f-en',l:'English name'},{id:'f-serving',l:'Serving size'},{id:'f-kcal',l:'Calories'},{id:'f-protein',l:'Protein'},{id:'f-carbs',l:'Carbohydrates'},{id:'f-fat',l:'Fat'}];
+  var miss=[];
+  req.forEach(function(r){ var el=document.getElementById(r.id); el.classList.remove('err'); if(!el.value.trim()){el.classList.add('err');miss.push(r.l);} });
+  if(miss.length){errEl.textContent=(getCurrentLang()==='zh'?'请填写：':'Please fill in: ')+miss.join(', ');errEl.style.display='block';return;}
+  var allergens=[];
+  document.querySelectorAll('.allergen-check.on').forEach(function(b){allergens.push(b.dataset.name);});
+  var en=document.getElementById('f-en').value.trim();
+  var dish={id:'custom-'+Date.now(),cn:document.getElementById('f-cn').value.trim(),en:en,canteen:document.getElementById('f-canteen').value,station:document.getElementById('f-station').value.trim(),serving:parseFloat(document.getElementById('f-serving').value),kcal:parseFloat(document.getElementById('f-kcal').value),protein:parseFloat(document.getElementById('f-protein').value),carbs:parseFloat(document.getElementById('f-carbs').value),fat:parseFloat(document.getElementById('f-fat').value),allergens:allergens,file:'dish-'+slugify(en)+'.html',ts:Date.now()};
+  var custom=getCustomDishes(); custom.push(dish); saveCustomDishes(custom);
+  appendDishRow(dish); updateStats(); closeAddDish();
+  showToast(getCurrentLang()==='zh'?'菜品已添加':'Dish added to dashboard');
+};
+
+function showToast(msg){
+  var t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.animation='toastOut 0.3s ease-out forwards';setTimeout(function(){document.body.removeChild(t);},350);},2500);
+}
+</script>
+</body>
+</html>

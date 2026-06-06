@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A5C4A">
+<title>NutriScan 鲜码</title>
+<link rel="stylesheet" href="style.css">
+<script src="i18n.js"></script>
+<script src="core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<style>
+  .welcome-strip { background:#fff; border-left:3px solid var(--primary-mid); padding:9px 13px; font-size:11px; color:var(--muted); line-height:1.5; border-radius:0 6px 6px 0; }
+  .welcome-strip strong { color:var(--primary); }
+  .scan-btn { display:flex; align-items:center; justify-content:center; gap:10px; background:var(--primary); color:#fff; border:none; border-radius:8px; padding:16px; font-size:15px; font-weight:700; font-family:inherit; width:100%; cursor:pointer; letter-spacing:0.3px; box-shadow:0 2px 10px rgba(26,92,74,0.28); transition:background 0.15s; }
+  .scan-btn:active { background:#134a3a; }
+  .scan-icon-box { width:26px; height:26px; border:2.5px solid rgba(255,255,255,0.75); border-radius:4px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .scan-icon-inner { width:11px; height:11px; border:2px solid #fff; border-radius:2px; }
+  #scanner-overlay { display:none; position:fixed; inset:0; background:#000; z-index:200; flex-direction:column; max-width:390px; margin:0 auto; }
+  @media (max-width:480px) { #scanner-overlay { max-width:100%; } }
+  .scanner-top-bar { background:rgba(0,0,0,.80); padding:14px 16px; display:flex; align-items:center; gap:12px; flex-shrink:0; border-bottom:1px solid rgba(255,255,255,.08); }
+  .scanner-back { background:none; border:none; color:var(--light-teal); font-size:24px; cursor:pointer; padding:0; line-height:1; font-family:inherit; min-width:24px; }
+  .scanner-top-title { color:#fff; font-size:14px; font-weight:600; }
+  .scanner-viewfinder { flex:1; position:relative; overflow:hidden; }
+  #scanner-video { width:100%; height:100%; object-fit:cover; display:block; }
+  .scanner-vignette { position:absolute; inset:0; background:rgba(0,0,0,.42); pointer-events:none; }
+  .scan-frame { position:absolute; top:50%; left:50%; transform:translate(-50%,-62%); width:224px; height:224px; pointer-events:none; }
+  .sf-corner { position:absolute; width:30px; height:30px; border-color:#2A8A6E; border-style:solid; border-width:0; }
+  .sf-corner.tl{top:0;left:0;border-top-width:3px;border-left-width:3px;border-radius:3px 0 0 0}
+  .sf-corner.tr{top:0;right:0;border-top-width:3px;border-right-width:3px;border-radius:0 3px 0 0}
+  .sf-corner.bl{bottom:0;left:0;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 3px}
+  .sf-corner.br{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 3px 0}
+  #scan-line { position:absolute; left:4px; right:4px; height:2px; top:0; background:linear-gradient(90deg,transparent 0%,#2A8A6E 40%,#D4882A 60%,transparent 100%); box-shadow:0 0 8px rgba(42,138,110,.9); }
+  .frame-hint { position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,.65); font-size:11px; white-space:nowrap; }
+  .scanner-bottom-bar { background:rgba(0,0,0,.80); padding:16px; text-align:center; flex-shrink:0; border-top:1px solid rgba(255,255,255,.08); }
+  #scanner-status { color:var(--light-teal); font-size:12px; min-height:18px; margin-bottom:14px; }
+  .scanner-cancel { background:none; border:2px solid rgba(184,217,209,.6); color:var(--light-teal); border-radius:6px; padding:9px 32px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; }
+  .recent-dish-card { background:var(--white); border-radius:8px; border:1px solid var(--border); box-shadow:0 1px 5px rgba(0,0,0,.07); display:flex; align-items:center; padding:10px 14px; text-decoration:none; color:var(--text); gap:10px; transition:background 0.12s; }
+  .recent-dish-card:active { background:#f5f5f5; }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="header">
+    <div class="brand-block">
+      <div class="brand"><span class="nutri">NUTRI</span><span class="scan">SCAN</span><span class="zh">鲜码</span></div>
+      <div class="brand-sub" data-i18n="brand-sub">Nutritional Transparency · Peking University</div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <button class="scan-btn" onclick="openScanner()">
+      <div class="scan-icon-box"><div class="scan-icon-inner"></div></div>
+      <span data-i18n="scan-btn">Scan Dish QR Code</span>
+    </button>
+
+    <a class="today-card" href="diary.html">
+      <div class="today-top">
+        <span class="today-title" data-i18n="today-title">Today</span>
+        <span class="today-link" data-i18n="today-link">Diary ›</span>
+      </div>
+      <div class="today-kcal-row">
+        <span class="today-kcal-num" id="today-kcal">0</span>
+        <span class="today-kcal-goal">/ <span id="today-kcal-goal">2000</span> kcal</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill protein" id="today-bar" style="width:0%"></div></div>
+      <div class="today-macros" id="today-macros"></div>
+      <div id="today-empty-hint" class="today-empty" data-i18n="today-empty" style="display:none;">No meals logged yet today</div>
+    </a>
+
+    <a class="outline-btn" href="profile.html" data-i18n="profile-link-btn">My Goals & Profile →</a>
+
+    <div id="recent-section" style="display:none;">
+      <div class="section-label" data-i18n="recent-label">Recently Scanned</div>
+      <div id="recent-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+    <div class="welcome-strip" data-i18n-html="welcome-text"><strong>Or browse today's featured dishes below.</strong> Tap any dish to view the full nutrition panel, allergens, and macronutrient breakdown.</div>
+
+    <div class="section-label" data-i18n="section-catering">餐饮综合楼 · Catering Building</div>
+
+    <a class="dish-card" href="dish-ganbian.html">
+      <div class="dish-icon"><img src="img/ganbian-zaiji.jpg" alt="干煸仔鸡饭"></div>
+      <div class="dish-info">
+        <div class="dish-cn">干煸仔鸡饭</div>
+        <div class="dish-pinyin">Gānbiān Zǎijī Fàn</div>
+        <div class="dish-en">Dry-Fried Young Chicken with Rice</div>
+        <div class="dish-meta" data-i18n="meta-ganbian">Soy · Gluten</div>
+      </div>
+      <div class="dish-right"><div class="dish-kcal-num">795</div><div class="dish-kcal-unit">kcal</div></div>
+      <div class="dish-arrow">›</div>
+    </a>
+
+    <div class="section-label" data-i18n="section-yncoffee" style="margin-top:4px;">燕南咖啡 · YN Coffee</div>
+
+    <a class="dish-card" href="dish-yn-blackchoco.html">
+      <div class="dish-icon">巧椰</div>
+      <div class="dish-info">
+        <div class="dish-cn">黑巧椰椰骑士冷萃酸奶碗</div>
+        <div class="dish-pinyin">Hēiqiǎo Yēyē Qíshì Lěngcuì Suānnǎi Wǎn</div>
+        <div class="dish-en">Black Chocolate Coconut Hazelnut Cold Brew Yogurt Bowl</div>
+        <div class="dish-meta" data-i18n="meta-yn-blackchoco">Dairy · Tree Nuts · Soy</div>
+      </div>
+      <div class="dish-right"><div class="dish-kcal-num">545</div><div class="dish-kcal-unit">kcal</div></div>
+      <div class="dish-arrow">›</div>
+    </a>
+
+    <a class="dish-card" href="dish-yn-nutbowl.html">
+      <div class="dish-icon">坚果</div>
+      <div class="dish-info">
+        <div class="dish-cn">坚果冷萃酸奶碗</div>
+        <div class="dish-pinyin">Jiānguǒ Lěngcuì Suānnǎi Wǎn</div>
+        <div class="dish-en">Nutty Cold Brew Yogurt Bowl</div>
+        <div class="dish-meta" data-i18n="meta-yn-nutbowl">Dairy · Tree Nuts</div>
+      </div>
+      <div class="dish-right"><div class="dish-kcal-num">435</div><div class="dish-kcal-unit">kcal</div></div>
+      <div class="dish-arrow">›</div>
+    </a>
+
+    <a class="dish-card" href="dish-yn-mango.html">
+      <div class="dish-icon">芒昔</div>
+      <div class="dish-info">
+        <div class="dish-cn">超级芒果酸奶昔</div>
+        <div class="dish-pinyin">Chāojí Mángguǒ Suānnǎi Xī</div>
+        <div class="dish-en">Super Mango Yogurt Smoothie</div>
+        <div class="dish-meta" data-i18n="meta-yn-mango">Dairy · Vegetarian</div>
+      </div>
+      <div class="dish-right"><div class="dish-kcal-num">325</div><div class="dish-kcal-unit">kcal</div></div>
+      <div class="dish-arrow">›</div>
+    </a>
+
+    <a class="outline-btn" href="dashboard.html" style="margin-top:6px;" data-i18n="operator-btn-idx">Canteen Operator Dashboard →</a>
+    <div style="text-align:center;font-size:10px;color:var(--muted);padding-top:4px;" data-i18n="footer-text">Powered by NutriScan 鲜码 · Prototype v0.3</div>
+  </div>
+
+  <!-- SCANNER OVERLAY -->
+  <div id="scanner-overlay">
+    <div class="scanner-top-bar">
+      <button class="scanner-back" onclick="closeScanner()">&#8249;</button>
+      <span class="scanner-top-title" data-i18n="scanner-title">Scan Dish QR Code</span>
+    </div>
+    <div class="scanner-viewfinder">
+      <video id="scanner-video" playsinline muted></video>
+      <canvas id="scanner-canvas" style="display:none;"></canvas>
+      <div class="scanner-vignette"></div>
+      <div class="scan-frame">
+        <div class="sf-corner tl"></div><div class="sf-corner tr"></div>
+        <div class="sf-corner bl"></div><div class="sf-corner br"></div>
+        <div id="scan-line"></div>
+        <div class="frame-hint" data-i18n="scanner-hint">Align QR code within frame</div>
+      </div>
+    </div>
+    <div class="scanner-bottom-bar">
+      <div id="scanner-status" data-i18n="scanner-status-def">Point camera at a NutriScan QR code</div>
+      <button class="scanner-cancel" onclick="closeScanner()" data-i18n="scanner-cancel">Cancel</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* today summary */
+(function () {
+  try {
+    var g = getProfile(), s = sumRange(startOfToday());
+    document.getElementById('today-kcal').textContent = s.kcal;
+    document.getElementById('today-kcal-goal').textContent = g.kcal;
+    var kp = pct(s.kcal, g.kcal);
+    var bar = document.getElementById('today-bar');
+    bar.style.width = Math.min(kp, 100) + '%';
+    bar.classList.toggle('over', kp > 100);
+    function chip(lbl, val, goal) {
+      var over = val > goal ? ' over' : '';
+      return '<span class="tm' + over + '"><b>' + lbl + '</b> ' + val + '/' + goal + 'g</span>';
+    }
+    document.getElementById('today-macros').innerHTML =
+      chip('P', s.protein, g.protein) + chip('C', s.carbs, g.carbs) + chip('F', s.fat, g.fat);
+    if (s.count === 0) document.getElementById('today-empty-hint').style.display = 'block';
+  } catch (e) {}
+})();
+
+/* recently scanned */
+(function () {
+  try {
+    var hist = JSON.parse(localStorage.getItem('nutriscan_history') || '[]');
+    if (!hist.length) return;
+    var lang = getCurrentLang();
+    function timeAgo(ts) {
+      var d = Date.now()-ts, m = Math.floor(d/60000);
+      if (lang==='zh') {
+        if (m<1) return '刚刚'; if (m<60) return m+' 分钟前';
+        var h=Math.floor(m/60); return h<24?h+' 小时前':Math.floor(h/24)+' 天前';
+      }
+      if (m<1) return 'Just now'; if (m<60) return m+' min ago';
+      var h=Math.floor(m/60); return h<24?h+'h ago':Math.floor(h/24)+'d ago';
+    }
+    document.getElementById('recent-section').style.display = 'block';
+    var list = document.getElementById('recent-list');
+    hist.slice(0,3).forEach(function(item){
+      var a=document.createElement('a'); a.className='recent-dish-card'; a.href=item.url;
+      var py = item.pinyin ? '<div class="dish-pinyin">'+item.pinyin+'</div>' : '';
+      var ic = item.img ? '<div class="dish-icon dish-icon-sm"><img src="'+item.img+'" alt=""></div>' : '<div class="dish-icon dish-icon-sm">'+item.icon+'</div>';
+      a.innerHTML=ic+
+        '<div class="dish-info"><div class="dish-cn">'+item.cn+'</div>'+py+'<div class="dish-en">'+item.en+'</div>'+
+        '<div class="dish-meta">'+timeAgo(item.ts)+'</div></div>'+
+        '<div class="dish-right"><div class="dish-kcal-num">'+item.kcal+'</div><div class="dish-kcal-unit">kcal</div></div>'+
+        '<div class="dish-arrow">&#8250;</div>';
+      list.appendChild(a);
+    });
+  } catch(e) {}
+})();
+
+/* QR scanner */
+(function () {
+  var vs=null,si=null,li=null,lp=0,ld=1;
+  function ss(m){document.getElementById('scanner-status').textContent=m;}
+  window.openScanner=function(){
+    if(typeof jsQR==='undefined'){alert(getCurrentLang()==='zh'?'二维码库未加载':'QR library not loaded');return;}
+    document.getElementById('scanner-overlay').style.display='flex';
+    ss(t('scanner-status-def'));
+    lp=0;ld=1;
+    li=setInterval(function(){lp+=1.8*ld;if(lp>=220)ld=-1;if(lp<=0)ld=1;document.getElementById('scan-line').style.top=lp+'px';},10);
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ss('Camera not supported.');return;}
+    navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}})
+      .then(function(stream){vs=stream;var v=document.getElementById('scanner-video');v.srcObject=stream;v.play().then(function(){ss(t('scanner-status-def'));si=setInterval(sf,200);});})
+      .catch(function(err){ss(err.name==='NotAllowedError'?(getCurrentLang()==='zh'?'摄像头权限被拒绝':'Camera access denied.'):'Camera unavailable: '+err.name);});
+  };
+  window.closeScanner=function(){
+    if(si){clearInterval(si);si=null;}if(li){clearInterval(li);li=null;}
+    if(vs){vs.getTracks().forEach(function(t){t.stop();});vs=null;}
+    document.getElementById('scanner-video').srcObject=null;
+    document.getElementById('scanner-overlay').style.display='none';
+  };
+  function sf(){
+    var v=document.getElementById('scanner-video'),c=document.getElementById('scanner-canvas');
+    if(!v||v.readyState!==v.HAVE_ENOUGH_DATA)return;
+    c.width=v.videoWidth;c.height=v.videoHeight;
+    c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+    var img=c.getContext('2d').getImageData(0,0,c.width,c.height);
+    var code=jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});
+    if(code){closeScanner();var url=code.data;
+      var m=url.match(/(dish-[\w-]+\.html|index\.html|dashboard\.html)/);
+      if(m){window.location.href=m[1];}else if(/^https?:\/\//.test(url)){window.location.href=url;}else{alert('QR: '+url);}
+    }
+  }
+})();
+</script>
+</body>
+</html>

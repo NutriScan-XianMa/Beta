@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A5C4A">
+<title>My Diary · NutriScan</title>
+<link rel="stylesheet" href="style.css">
+<script src="i18n.js"></script>
+<script src="core.js"></script>
+</head>
+<body>
+<div class="phone">
+
+  <div class="header">
+    <a class="back-btn" href="index.html">&#8249;</a>
+    <div class="header-title">
+      <div class="dish-name" data-i18n="diary-title">My Diary</div>
+      <div class="dish-location" data-i18n="diary-sub">What you have eaten</div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="period-toggle">
+      <button class="period-btn active" data-period="today" onclick="setPeriod('today')" data-i18n="period-today">Today</button>
+      <button class="period-btn" data-period="week"  onclick="setPeriod('week')"  data-i18n="period-week">This Week</button>
+      <button class="period-btn" data-period="month" onclick="setPeriod('month')" data-i18n="period-month">This Month</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header" data-i18n="diary-summary">Intake vs Goals</div>
+      <div class="card-body" id="summary-body"></div>
+    </div>
+
+    <div class="section-label" data-i18n="diary-meals">Logged Meals</div>
+    <div id="meals-body"></div>
+
+    <div style="text-align:center;font-size:10px;color:var(--muted);padding-top:4px;" data-i18n="page-footer">NutriScan 鲜码 · Prototype v0.3</div>
+  </div>
+</div>
+
+<script>
+var period = 'today';
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+var EN_DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var EN_MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var ZH_DOW = ['周日','周一','周二','周三','周四','周五','周六'];
+
+function fmtTime(ts) { var d = new Date(ts); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+function fmtDay(ts) {
+  var d = new Date(ts);
+  if (getCurrentLang() === 'zh') return (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + ZH_DOW[d.getDay()];
+  return EN_DOW[d.getDay()] + ', ' + EN_MON[d.getMonth()] + ' ' + d.getDate();
+}
+function dayKey(ts) { var d = new Date(ts); d.setHours(0, 0, 0, 0); return d.getTime(); }
+
+function periodStart() {
+  if (period === 'week')  return startOfWeek();
+  if (period === 'month') return startOfMonth();
+  return startOfToday();
+}
+
+function summaryRow(labelKey, total, dailyGoal, unit, days) {
+  var perDay = Math.round(total / days);
+  var p = pct(perDay, dailyGoal);
+  var over = p > 100 ? ' over' : '';
+  var suffix = period === 'today' ? '' : t('diary-perday');
+  var totalLine = period === 'today' ? '' :
+    '<div class="diary-avg">' + t('diary-total') + ': ' + total + ' ' + unit + ' · ' + days + ' ' + t('diary-days') + '</div>';
+  return '<div class="diary-row">' +
+      '<div class="diary-row-top">' +
+        '<span class="macro-name">' + t(labelKey) + '</span>' +
+        '<span class="diary-vals' + over + '">' + perDay + ' / ' + dailyGoal + ' ' + unit + suffix + '</span>' +
+      '</div>' +
+      '<div class="bar-bg"><div class="bar-fill ' + barClass(labelKey) + over + '" style="width:' + Math.min(p, 100) + '%"></div></div>' +
+      totalLine +
+    '</div>';
+}
+function barClass(k) {
+  if (k === 'macro-protein') return 'protein';
+  if (k === 'macro-carbs')   return 'carbs';
+  if (k === 'macro-fat')     return 'fat';
+  return 'kcal-bar';
+}
+
+function renderSummary() {
+  var g = getProfile(), s = sumRange(periodStart()), days = daysElapsed(period);
+  var body = document.getElementById('summary-body');
+  body.innerHTML =
+    summaryRow('macro-kcal',    s.kcal,    g.kcal,    'kcal', days) +
+    summaryRow('macro-protein', s.protein, g.protein, 'g',    days) +
+    summaryRow('macro-carbs',   s.carbs,   g.carbs,   'g',    days) +
+    summaryRow('macro-fat',     s.fat,     g.fat,     'g',    days);
+}
+
+function renderMeals() {
+  var start = periodStart();
+  var meals = getLog().filter(function (e) { return e.ts >= start; }).sort(function (a, b) { return b.ts - a.ts; });
+  var body = document.getElementById('meals-body');
+  if (!meals.length) {
+    body.innerHTML = '<div class="diary-empty">' + t('diary-empty') + '</div>';
+    return;
+  }
+  var html = '', lastDay = null;
+  meals.forEach(function (m) {
+    var dk = dayKey(m.ts);
+    if (dk !== lastDay) {
+      html += '<div class="meal-day">' + fmtDay(m.ts) + '</div>';
+      lastDay = dk;
+    }
+    var portion = m.portion && m.portion !== 1 ? ' <span class="meal-portion">×' + m.portion + '</span>' : '';
+    var py = m.pinyin ? m.pinyin + ' · ' : '';
+    var name = getCurrentLang() === 'zh' ? m.cn : m.en;
+    html += '<div class="meal-item">' +
+        '<div class="meal-icon">' + m.icon + '</div>' +
+        '<div class="meal-info">' +
+          '<div class="meal-name">' + name + portion + '</div>' +
+          '<div class="meal-sub">' + py + m.kcal + ' kcal · ' + fmtTime(m.ts) + '</div>' +
+        '</div>' +
+        '<button class="meal-remove" onclick="removeMeal(\'' + m.id + '\')">&#215;</button>' +
+      '</div>';
+  });
+  html += '<div class="reset-link" onclick="clearAll()" data-clear>' + t('diary-clear') + '</div>';
+  body.innerHTML = html;
+}
+
+function renderDiary() { renderSummary(); renderMeals(); }
+
+function setPeriod(p) {
+  period = p;
+  document.querySelectorAll('.period-btn').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.period === p);
+  });
+  renderDiary();
+}
+function removeMeal(id) { removeLog(id); renderDiary(); }
+function clearAll() {
+  if (confirm(t('diary-confirm'))) { localStorage.setItem('nutriscan_log', '[]'); renderDiary(); }
+}
+
+document.addEventListener('DOMContentLoaded', renderDiary);
+</script>
+</body>
+</html>
