@@ -23,6 +23,7 @@ html, body {
   font-family: 'Segoe UI', 'Calibri', Arial, sans-serif;
   background: #ccc;
   min-height: 100vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   -webkit-font-smoothing: antialiased;
@@ -650,7 +651,7 @@ html, body {
    On real phones, fill the whole screen (no 390px cap, no
    grey side margins). Desktop keeps the centered phone mock-up.
 ══════════════════ */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   html, body { background: var(--bg); }
   .phone {
     max-width: 100%;
