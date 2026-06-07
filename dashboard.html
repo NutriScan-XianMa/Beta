@@ -32,9 +32,9 @@
   <div class="content">
 
     <div class="stat-row">
-      <div class="stat-box"><div class="stat-num" id="stat-scans">127</div><div class="stat-lbl" data-i18n="stat-scans-lbl">Scans today</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-dishes">4</div><div class="stat-lbl" data-i18n="stat-dishes-lbl">Dishes active</div></div>
-      <div class="stat-box"><div class="stat-num">2</div><div class="stat-lbl" data-i18n="stat-canteens-lbl">Canteens</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-scans">804</div><div class="stat-lbl" data-i18n="stat-scans-lbl">Scans today</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-dishes">23</div><div class="stat-lbl" data-i18n="stat-dishes-lbl">Dishes active</div></div>
+      <div class="stat-box"><div class="stat-num">3</div><div class="stat-lbl" data-i18n="stat-canteens-lbl">Canteens</div></div>
     </div>
 
     <div class="card">
@@ -43,22 +43,117 @@
         <div id="dish-list">
           <div class="dish-row">
             <div class="status-dot active"></div>
-            <div style="flex:1;"><div class="dr-name">干煸仔鸡饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">餐饮综合楼 · 07:42 · 54 scans</div></div>
+            <div style="flex:1;"><div class="dr-name">泰式咖喱饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:15 · 28 scans</div></div>
+            <button class="qr-btn" onclick="openQR('泰式咖喱饭  Thai Curry Rice','dish-yan-thai.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">咖喱乌冬面 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:18 · 32 scans</div></div>
+            <button class="qr-btn" onclick="openQR('咖喱乌冬面  Curry Udon','dish-yan-curry-udon.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">咖喱鳕鱼排饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:22 · 38 scans</div></div>
+            <button class="qr-btn" onclick="openQR('咖喱鳕鱼排饭  Curry Cod Cutlet Rice','dish-yan-curry-cod.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">咖喱猪排饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:25 · 51 scans</div></div>
+            <button class="qr-btn" onclick="openQR('咖喱猪排饭  Curry Pork Cutlet Rice','dish-yan-curry-pork.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">咖喱鸡肉乌冬面 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:28 · 36 scans</div></div>
+            <button class="qr-btn" onclick="openQR('咖喱鸡肉乌冬面  Curry Chicken Udon','dish-yan-curry-chicken-udon.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">尖椒滑蛋饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 07:45 · 22 scans</div></div>
+            <button class="qr-btn" onclick="openQR('尖椒滑蛋饭  Pepper Scrambled-Egg Rice','dish-yan-pepper-egg.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">平菇滑蛋饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 07:48 · 19 scans</div></div>
+            <button class="qr-btn" onclick="openQR('平菇滑蛋饭  Oyster Mushroom Scrambled-Egg Rice','dish-yan-mushroom-egg.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">猪排滑蛋饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:32 · 44 scans</div></div>
+            <button class="qr-btn" onclick="openQR('猪排滑蛋饭  Pork Cutlet Scrambled-Egg Rice','dish-yan-pork-egg.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">虾仁滑蛋饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:35 · 37 scans</div></div>
+            <button class="qr-btn" onclick="openQR('虾仁滑蛋饭  Shrimp Scrambled-Egg Rice','dish-yan-shrimp-egg.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">照烧鸡排饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:40 · 55 scans</div></div>
+            <button class="qr-btn" onclick="openQR('照烧鸡排饭  Teriyaki Chicken Cutlet Rice','dish-yan-teriyaki.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">韩式泡菜肥牛饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:42 · 49 scans</div></div>
+            <button class="qr-btn" onclick="openQR('韩式泡菜肥牛饭  Korean Kimchi Beef Rice','dish-yan-kimchi-beef.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">柠檬鸡饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:45 · 33 scans</div></div>
+            <button class="qr-btn" onclick="openQR('柠檬鸡饭  Lemon Chicken Rice','dish-yan-lemon-chicken.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">芝士泡菜拉面 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:48 · 26 scans</div></div>
+            <button class="qr-btn" onclick="openQR('芝士泡菜拉面  Cheese Kimchi Ramen','dish-yan-cheese-ramen.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">骨汤拉面 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 11:50 · 35 scans</div></div>
+            <button class="qr-btn" onclick="openQR('骨汤拉面  Bone Broth Ramen','dish-yan-bone-ramen.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">章鱼小丸子 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 12:00 · 41 scans</div></div>
+            <button class="qr-btn" onclick="openQR('章鱼小丸子  Takoyaki','dish-yan-takoyaki.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">培根意大利面 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 12:05 · 24 scans</div></div>
+            <button class="qr-btn" onclick="openQR('培根意大利面  Bacon Spaghetti','dish-yan-bacon-pasta.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">虾仁意大利面 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 12:08 · 22 scans</div></div>
+            <button class="qr-btn" onclick="openQR('虾仁意大利面  Shrimp Spaghetti','dish-yan-shrimp-pasta.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">地狱拉面 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 12:12 · 18 scans</div></div>
+            <button class="qr-btn" onclick="openQR('地狱拉面  Hell Ramen','dish-yan-hell-ramen.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">日式炸鸡块 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南食堂 · 12:15 · 39 scans</div></div>
+            <button class="qr-btn" onclick="openQR('日式炸鸡块  Japanese Karaage','dish-yan-karaage.html')">QR</button>
+          </div>
+          <div class="dish-row">
+            <div class="status-dot active"></div>
+            <div style="flex:1;"><div class="dr-name">干煸仔鸡饭 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">餐饮综合楼 · 11:30 · 54 scans</div></div>
             <button class="qr-btn" onclick="openQR('干煸仔鸡饭  Dry-Fried Young Chicken with Rice','dish-ganbian.html')">QR</button>
           </div>
           <div class="dish-row">
             <div class="status-dot active"></div>
-            <div style="flex:1;"><div class="dr-name">黑巧椰椰骑士冷萃酸奶碗 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 07:45 · 41 scans</div></div>
+            <div style="flex:1;"><div class="dr-name">黑巧椰椰骑士冷萃酸奶碗 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 09:45 · 41 scans</div></div>
             <button class="qr-btn" onclick="openQR('黑巧椰椰骑士冷萃酸奶碗  Black Chocolate Coconut Hazelnut Cold Brew Yogurt Bowl','dish-yn-blackchoco.html')">QR</button>
           </div>
           <div class="dish-row">
             <div class="status-dot active"></div>
-            <div style="flex:1;"><div class="dr-name">坚果冷萃酸奶碗 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 08:10 · 32 scans</div></div>
+            <div style="flex:1;"><div class="dr-name">坚果冷萃酸奶碗 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 10:10 · 32 scans</div></div>
             <button class="qr-btn" onclick="openQR('坚果冷萃酸奶碗  Nutty Cold Brew Yogurt Bowl','dish-yn-nutbowl.html')">QR</button>
           </div>
           <div class="dish-row">
             <div class="status-dot active"></div>
-            <div style="flex:1;"><div class="dr-name">超级芒果酸奶昔 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 08:22 · 28 scans</div></div>
+            <div style="flex:1;"><div class="dr-name">超级芒果酸奶昔 &nbsp;<span class="badge-live">Live</span></div><div class="dr-meta">燕南咖啡 · 10:22 · 28 scans</div></div>
             <button class="qr-btn" onclick="openQR('超级芒果酸奶昔  Super Mango Yogurt Smoothie','dish-yn-mango.html')">QR</button>
           </div>
           <div id="custom-dish-rows"></div>
@@ -70,7 +165,7 @@
       <div class="card-header" data-i18n="analytics-head">Today's Scan Analytics</div>
       <div class="card-body">
         <div class="analytics-row"><span class="ar-label" data-i18n="an-peak-lbl">Peak hour</span><span data-i18n="an-peak-val">11:30 to 12:30 (68 scans)</span></div>
-        <div class="analytics-row"><span class="ar-label" data-i18n="an-top-lbl">Most scanned dish</span><span data-i18n="an-top-val">干煸仔鸡饭 (54 scans)</span></div>
+        <div class="analytics-row"><span class="ar-label" data-i18n="an-top-lbl">Most scanned dish</span><span data-i18n="an-top-val">照烧鸡排饭 (55 scans)</span></div>
         <div class="analytics-row"><span class="ar-label" data-i18n="an-allerg-lbl">Allergen taps</span><span data-i18n="an-allerg-val">Dairy · Tree Nuts (most flagged)</span></div>
         <div class="analytics-row"><span class="ar-label" data-i18n="an-time-lbl">Avg. time on page</span><span data-i18n="an-time-val">18 seconds</span></div>
         <div class="analytics-row"><span class="ar-label" data-i18n="an-return-lbl">Return visitors</span><span data-i18n="an-return-val">34%</span></div>
@@ -213,9 +308,9 @@ function getCustomDishes() {
 function saveCustomDishes(a) { try{ localStorage.setItem('nutriscan_custom_dishes',JSON.stringify(a)); }catch(e){} }
 function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
 function updateStats() {
-  var n=3+getCustomDishes().length;
+  var n=23+getCustomDishes().length;
   document.getElementById('stat-dishes').textContent=n;
-  document.getElementById('stat-scans').textContent=127+getCustomDishes().length*3;
+  document.getElementById('stat-scans').textContent=804+getCustomDishes().length*3;
 }
 function appendDishRow(d) {
   var r=document.createElement('div'); r.className='dish-row'; r.id='row-'+d.id;

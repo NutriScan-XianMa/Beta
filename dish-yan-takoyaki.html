@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A5C4A">
+<title>章鱼小丸子 · NutriScan</title>
+<link rel="stylesheet" href="style.css">
+<script src="i18n.js"></script>
+<script src="core.js"></script>
+<script>
+window.DISH = { key:'yan-takoyaki', cn:'章鱼小丸子', en:'Takoyaki', pinyin:'Zhāngyú Xiǎo Wánzi',
+  icon:'章鱼', url:'dish-yan-takoyaki.html',
+  kcal:380, protein:13, carbs:36, fat:20 };
+</script>
+</head>
+<body>
+<div class="phone">
+
+  <div class="header">
+    <a class="back-btn" href="index.html">&#8249;</a>
+    <div class="header-title">
+      <div class="dish-name">章鱼小丸子 &nbsp; Takoyaki</div>
+      <div class="dish-pinyin">Zhāngyú Xiǎo Wánzi</div>
+      <div class="dish-location">燕南食堂 · 价目表档口</div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="card">
+      <div class="card-header" data-i18n="calories-header">Calories</div>
+      <div class="calorie-section">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 144 144" width="144" height="144">
+            <circle cx="72" cy="72" r="56" fill="none" stroke="#EDECEA" stroke-width="13"/>
+            <circle id="ring-progress" cx="72" cy="72" r="56" fill="none" stroke="#1A5C4A" stroke-width="13"
+                    stroke-dasharray="0 351.86" stroke-linecap="round"
+                    style="transition:stroke-dasharray 1.1s cubic-bezier(0.22,1,0.36,1);"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-kcal" id="ring-kcal">380</div>
+            <div class="ring-unit">kcal</div>
+            <div class="ring-pct" id="ring-pct">19% daily</div>
+          </div>
+        </div>
+        <div class="calorie-caption" data-i18n="daily-ref">Based on a 2,000 kcal daily reference intake</div>
+        <div class="portion-strip">
+          <span class="portion-label" data-i18n="serving-label">Serving</span>
+          <div class="portion-buttons">
+            <button class="portion-btn" data-f="0.5"  onclick="setPortion(0.5)">0.5&#215;</button>
+            <button class="portion-btn active" data-f="1" onclick="setPortion(1)">1&#215;</button>
+            <button class="portion-btn" data-f="1.5" onclick="setPortion(1.5)">1.5&#215;</button>
+            <button class="portion-btn" data-f="2"   onclick="setPortion(2)">2&#215;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" data-i18n="macros-header">Macronutrients</div>
+      <div class="card-body">
+        <div class="macro-list">
+          <div>
+            <div class="macro-row-top"><span class="macro-name" data-i18n="macro-protein">Protein</span><span class="macro-val" id="val-protein">13 g · 22% of daily goal</span></div>
+            <div class="bar-bg"><div class="bar-fill protein" id="bar-protein" style="width:0%"></div></div>
+          </div>
+          <div>
+            <div class="macro-row-top"><span class="macro-name" data-i18n="macro-carbs">Carbohydrates</span><span class="macro-val" id="val-carbs">36 g · 14% of daily goal</span></div>
+            <div class="bar-bg"><div class="bar-fill carbs" id="bar-carbs" style="width:0%"></div></div>
+          </div>
+          <div>
+            <div class="macro-row-top"><span class="macro-name" data-i18n="macro-fat">Fat</span><span class="macro-val" id="val-fat">20 g · 31% of daily goal</span></div>
+            <div class="bar-bg"><div class="bar-fill fat" id="bar-fat" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span data-i18n="allergens-header">Allergens</span>
+        <span class="hint" data-i18n="allergens-hint">Tap to flag</span>
+      </div>
+      <div class="card-body">
+        <div class="allergen-grid">
+          <div class="allergen-chip absent" data-i18n="al-peanuts">Peanuts</div>
+          <div class="allergen-chip present" tabindex="0" data-i18n="al-soy">Soy</div>
+          <div class="allergen-chip absent" data-i18n="al-sesame">Sesame</div>
+          <div class="allergen-chip present" tabindex="0" data-i18n="al-gluten">Gluten</div>
+          <div class="allergen-chip absent" data-i18n="al-dairy">Dairy</div>
+          <div class="allergen-chip present" tabindex="0" data-i18n="al-shellfish">Shellfish</div>
+          <div class="allergen-chip present" tabindex="0" data-i18n="al-eggs">Eggs</div>
+          <div class="allergen-chip absent" data-i18n="al-treenuts">Tree Nuts</div>
+        </div>
+        <div class="allergen-note" data-i18n="allergen-note">Amber = present. Grey = not detected. Cross-contamination in shared kitchen is possible.</div>
+      </div>
+    </div>
+
+    <button class="log-btn" onclick="logMeal()">
+      <span class="log-plus">+</span> <span data-i18n="log-btn">Log This Meal</span>
+    </button>
+
+    <div class="disclaimer">
+      <div class="disc-title" data-i18n="disc-title">Estimated Values</div>
+      <span data-i18n="disc-body">Figures are calculated from Chinese Food Composition Standards (China CDC, 6th ed.) and may vary with portion size, preparation method, and ingredient batch.</span>
+    </div>
+
+    <a class="outline-btn" href="dashboard.html" data-i18n="operator-btn">Canteen Operator View →</a>
+    <div style="text-align:center;font-size:10px;color:var(--muted);" data-i18n="page-footer">NutriScan 鲜码 · Prototype v0.3</div>
+  </div>
+</div>
+</body>
+</html>
