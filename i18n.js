@@ -171,9 +171,6 @@ var STRINGS = {
     'an-return-val':      '34%',
     'actions-head':       'Actions',
     'add-dish-btn':       '+ Add New Dish',
-    'datasource-head':    'Data Source',
-    'datasource-p1':      'Nutritional values are estimated from Chinese Food Composition Standards (China CDC, 6th ed.) by entering dish ingredients and preparation method. No lab testing required.',
-    'datasource-p2':      'QR codes are generated automatically when a dish is created and do not change when values are updated.',
     'dash-footer':        'NutriScan 鲜码 · Prototype v0.3 · Operator Interface',
     /* add-dish form */
     'form-title':         'Add New Dish',
@@ -356,9 +353,6 @@ var STRINGS = {
     'an-return-val':      '34%',
     'actions-head':       '操作',
     'add-dish-btn':       '+ 新增菜品',
-    'datasource-head':    '数据来源',
-    'datasource-p1':      '营养数值通过输入菜品食材及烹饪方式，参照《中国食物成分表》（中国疾控中心，第6版）估算，无需实验室检测。',
-    'datasource-p2':      '二维码在菜品创建时自动生成，数值更新后二维码保持不变。',
     'dash-footer':        'NutriScan 鲜码 · 原型 v0.3 · 运营界面',
     /* add-dish form */
     'form-title':         '新增菜品',
