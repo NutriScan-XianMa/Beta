@@ -26,7 +26,7 @@ var STRINGS = {
     'profile-link-btn':   'My Goals & Profile →',
     /* dish card metas on index */
     'meta-ganbian':       'Soy · Gluten',
-    'section-catering':   '餐饮综合楼 · Catering Building',
+    'section-catering':   '家园食堂 · Jiayuan Canteen',
     'section-yncoffee':   '燕南咖啡 · YN Coffee',
     'section-yannan':     '燕南食堂 · Yannan Canteen',
     'meta-yn-blackchoco': 'Dairy · Tree Nuts · Soy',
@@ -62,7 +62,7 @@ var STRINGS = {
     'allergens-header':   'Allergens',
     'allergens-hint':     'Tap to flag',
     /* dish pages — ring */
-    'daily-ref':          'Based on a 2,000 kcal daily reference intake',
+    'daily-ref':          'Based on your {kcal} kcal daily goal',
     'daily-pct-suffix':   '% daily',
     /* dish pages — macros */
     'serving-label':      'Serving',
@@ -213,7 +213,7 @@ var STRINGS = {
     'profile-link-btn':   '我的目标与档案 →',
     /* dish card metas */
     'meta-ganbian':       '大豆 · 麸质',
-    'section-catering':   '餐饮综合楼',
+    'section-catering':   '家园食堂',
     'section-yncoffee':   '燕南咖啡',
     'section-yannan':     '燕南食堂',
     'meta-yn-blackchoco': '乳制品 · 坚果 · 大豆',
@@ -248,7 +248,7 @@ var STRINGS = {
     'macros-header':      '宏量营养素',
     'allergens-header':   '过敏原',
     'allergens-hint':     '点击标记',
-    'daily-ref':          '参考每日摄入量 2,000 千卡',
+    'daily-ref':          '基于您 {kcal} 千卡的每日目标',
     'daily-pct-suffix':   '% 每日量',
     'serving-label':      '份量',
     'macro-protein':      '蛋白质',

@@ -107,10 +107,16 @@ function setPortion(f) {
   var rp = document.getElementById('ring-pct');  if (rp) rp.textContent = kp + t('daily-pct-suffix');
   var rg = document.getElementById('ring-progress');
   if (rg) rg.style.strokeDasharray = Math.min(351.86 * kp / 100, 351.86) + ' 351.86';
+  updateCaption(g);
   var gs = t('daily-goal-suffix');
   setMacro('protein', p,  pct(p, g.protein), gs);
   setMacro('carbs',   c,  pct(c, g.carbs),   gs);
   setMacro('fat',     ft, pct(ft, g.fat),    gs);
+}
+
+function updateCaption(g) {
+  var capt = document.querySelector('.calorie-caption');
+  if (capt) capt.textContent = t('daily-ref').replace('{kcal}', (g || getProfile()).kcal);
 }
 
 function logMeal() {
@@ -130,6 +136,8 @@ function logMeal() {
 document.addEventListener('DOMContentLoaded', function () {
   if (!window.DISH) return;
   var D = window.DISH;
+  /* set caption immediately so the {kcal} placeholder never shows */
+  updateCaption();
   /* animate ring + bars from zero to computed values */
   setTimeout(function () { setPortion(1); }, 120);
   /* allergen flagging */
